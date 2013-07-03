@@ -1,0 +1,241 @@
+<?xml version="1.0"?>
+<!DOCTYPE rfc SYSTEM "rfc2629.dtd" [
+<!ENTITY RFC5310 PUBLIC "" "http://xml.resource.org/public/rfc/bibxml/reference.RFC.5310.xml">
+<!ENTITY RFC5329 PUBLIC "" "http://xml.resource.org/public/rfc/bibxml/reference.RFC.5329.xml">
+<!ENTITY RFC5250 PUBLIC "" "http://xml.resource.org/public/rfc/bibxml/reference.RFC.5250.xml">
+<!ENTITY RFC2119 PUBLIC "" "http://xml.resource.org/public/rfc/bibxml/reference.RFC.2119.xml">
+<!ENTITY RFC2328 PUBLIC "" "http://xml.resource.org/public/rfc/bibxml/reference.RFC.2328.xml">
+<!ENTITY RFC5340 PUBLIC "" "http://xml.resource.org/public/rfc/bibxml/reference.RFC.5340.xml">
+<!ENTITY RFC4970 PUBLIC "" "http://xml.resource.org/public/rfc/bibxml/reference.RFC.4970.xml">
+<!ENTITY RFC3630 PUBLIC "" "http://xml.resource.org/public/rfc/bibxml/reference.RFC.3630.xml">
+<!ENTITY RFC5286 PUBLIC "" "http://xml.resource.org/public/rfc/bibxml/reference.RFC.5286.xml">
+]>
+<?rfc toc="yes"?>
+<?rfc tocompact="yes"?>
+<?rfc tocdepth="3"?>
+<?rfc tocindent="yes"?>
+<?rfc symrefs="yes"?>
+<?rfc sortrefs="yes"?>
+<?rfc comments="yes"?>
+<?rfc inline="yes"?>
+<?rfc compact="yes"?>
+<?rfc subcompact="no"?>
+<rfc category="std" docName="draft-hegde-ospf-group-admin-tag-00" ipr="trust200902">
+
+<front>
+    <title>Advertising a router's administrative group tag in OSPF</title>
+
+    <author initials="S." surname="Hegde" fullname="Shraddha Hegde">
+	<organization>Juniper Networks, Inc.</organization>
+	<address>
+	    <postal>
+		<street>Embassy Business Park</street>
+		<city>Bangalore</city>
+		<region>KA</region>
+		<code>560093</code>
+		<country>India</country>
+	    </postal>
+	    <email>shraddha@juniper.net</email>
+	</address>
+    </author>
+
+    <author initials="H." surname="Raghuveer" fullname="Harish Raghuveer">
+	<organization>Juniper Networks, Inc.</organization>
+	<address>
+	    <postal>
+		<street>Embassy Business Park</street>
+		<city>Bangalore</city>
+		<code>560093</code>
+		<country>India</country>
+	    </postal>
+	    <email>hraghuveer@juniper.net</email>
+	</address>
+    </author>
+	
+    <date month="July" year="2013" />
+    <area>Routing</area>
+    <keyword>Internet-Draft</keyword>
+
+    <abstract>
+	<t> This document describes an extension to OSPF protocol <xref target="RFC2328" /> to 
+    add an optional operational capability that allows grouping of 
+    the nodes in an OSPF domain. This allows ease of management and 
+    control over route selection based on configured policies. This 
+    document provides an extension to carry the administrative group 
+    tag information in router information LSA for policy use.
+	</t>
+    </abstract>
+</front>
+
+<middle>
+<section title="Introduction" anchor='intro'>
+    <t> This document provides mechanisms to advertise administrative group 
+    tags in OSPF router information LSA <xref target="RFC4970"/>. OSPF external LSAs carry 
+    a tag information which is used to prevent routing loops by configuring 
+    policies. In certain applications, there is a need to group the nodes
+    based on their roles in the network and have policies to prefer or 
+    prune the group of nodes for next hop selection.
+    </t>
+
+    <section title='Terminology'>
+        <t>
+        The terminology used in this document for OSPF can be found in <xref target="RFC2328"/>. 		
+        </t>
+    </section>
+
+    <section title='Conventions'>
+	<t>
+	The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL
+	NOT", "SHOULD", "SHOULD NOT", "RECOMMENDED", "MAY", and
+	"OPTIONAL" in this document are to be interpreted as described
+        in <xref target="RFC2119"/>.
+	</t>
+    </section>
+</section>
+
+<section title='Solution'>
+    <t> For the purpose of advertising administrative group tag within OSPF 
+    a new TLV is proposed. This TLV may be carried in either 
+	<vspace blankLines="1" />
+	a)Router Information LSA <xref target="RFC4970"/> OR 
+	<vspace blankLines="1" />
+	b)Traffic Engineering LSA <xref target="RFC3630"/>
+	<vspace blankLines="1" />
+	Router Information LSA <xref target="RFC4970"/> advertises the capabilities of a 
+    node in link scoped, area scoped or AS scoped opaque LSA  <xref target="RFC5250"/>.
+	<vspace blankLines="1" />
+	This document proposes RI LSA as a means to carry the administrative
+    group tag information to support scenarios when the network is not TE 
+    enabled.
+    </t>
+</section>
+
+<section title='Admistrative-group-tag TLV'>
+    <t>  An administrative group tag is a 32-bit integer value that can be 
+    used to identify a group of nodes in the OSPF domain.
+    <vspace blankLines="1" />
+    The new TLV defined will be carried within an RI LSA for OSPFV2 and
+    OSPFV3. Router information LSA <xref target="RFC4970"/> can have link,area or AS level 
+    flooding scope. Choosing the flooding scope to flood the group 
+    tags are defined by the policies and is a local matter.
+    <vspace blankLines="1" />
+    The TLV specifies one or more administrative tag values. An OSPF
+    node advertises the set of groups it is part of in the OSPF domain.
+    (for example, all PE-nodes are configured with certain tag value, 
+    all P-nodes are configured with a different tag value in a domain).
+    </t>
+</section>
+
+<section title='TLV format'>
+	<section title='OSPF administrative group tag TLV'>
+	<t>The format of the TLVs within the body of an RI LSA is the same 
+    as the format used by the Traffic Engineering Extensions to OSPF 
+    <xref target="RFC3630"/>. 
+	<vspace blankLines="1" />    
+    The LSA payload consists of one or more nested Type/Length/Value
+    (TLV) triplets.  The format of each TLV is:
+	<vspace blankLines="2" />
+	
+	<figure anchor="OSPF-Admin-group-tag-TLV" title="OSPF Administrator group tag TLV" suppress-title="false" align="left" alt="" width="" height="">
+  <artwork xml:space="preserve" name="" type="" align="left" alt="" width="" height="">
+	  0               1               2               3
+      0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
+     +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+     |              Type             |             Length            |
+     +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+     |                    Administrative group tag1                  |
+     +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+     |                    Administrative group tag2                  |
+     +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+</artwork> 
+  </figure>
+
+     
+     <vspace blankLines="1" />
+	 <vspace blankLines="1" />
+      Type :   A 16-bit field defined by IANA.
+     <vspace blankLines="1" />
+      Length:  A 16-bit field that indicates the length of the value
+               portion in octets and will be a multiple of 4 octets
+               dependent on the number of tags advertised.
+     <vspace blankLines="1" />        
+      Value:   A  sequence of multiple 4 octets defining the 
+               administrative group tags.
+	</t>
+	</section>
+
+	<section title='Ordering of tags'>
+	<t> The semantics of the tag order are implementation-dependent. That 
+    is, there is no implied meaning to the ordering of the tags that
+    indicates a certain operation or set of operations that need to be 
+    performed based on the ordering.  
+    <vspace blankLines="1" />
+    Each tag SHOULD be treated as an autonomous identifier that MAY be 
+    used in policy to perform a policy action.  Whether or not tag A 
+    precedes or succeeds tag B SHOULD not change the meaning of the 
+    tag set.
+	</t>
+	</section>
+</section>
+
+<section title='Applications'>
+	<t>Increased deployment of Loop Free Alternates (LFA) as defined in 
+    <xref target="RFC5286"/> has exposed some limitations.New draft Operation management 
+    of Loop Free Alternates <xref target="I-D.litkowski-rtgwg-lfa-manageability"/>
+    proposes refinements to address those limitations.
+     <vspace blankLines="1" />
+    One of the proposed refinements is to be able to group the nodes 
+    in IGP domain with administrative tags and engineer the LFA based 
+    on configured policies.
+     <vspace blankLines="1" />
+    The mechanisms outlined in this document helps provide the capability
+    to advertise group tags within OSPF protocol in order to achieve 
+    policy based LFA selection.
+     <vspace blankLines="1" />
+    The policies configured on each node can then make use of these tags 
+    to prefer or prune certain group of nodes for selecting LFAs.
+	</t>
+</section>
+	 
+
+<section title='Security Considerations' anchor='sec-con'>
+
+    <t>
+    This document does not introduce any further security issues other
+    than those discussed in <xref target="RFC2328"/> and <xref target="RFC5340"/>.
+    </t>
+
+</section>
+
+<section anchor="IANA" title="IANA Considerations">
+
+    <t>IANA maintains the registry for the TLVs.  OSPF Administrative Tags
+    will require one new type code for the TLV defined in this document.
+    </t>
+
+</section>
+
+<section title='Acknowledgments'>
+    <t>  Thanks to Bharath R and Pushpasis Sarakar for useful inputs.
+    </t>
+</section>
+
+</middle>
+
+<back>
+<references title='Normative References'>
+       &RFC2328;
+	   &RFC5340;
+	   &RFC3630;
+	   &RFC4970;
+	   &RFC2119;
+	   &RFC5250;	
+</references>
+<references title='Informative References'>
+   &RFC5286;
+   &RFC5310;
+   &RFC5329; 
+   <?rfc include="http://xml.resource.org/public/rfc/bibxml3/reference.I-D.draft-litkowski-rtgwg-lfa-manageability-01.xml"?>
+</references>
+</back>
+
+</rfc>
