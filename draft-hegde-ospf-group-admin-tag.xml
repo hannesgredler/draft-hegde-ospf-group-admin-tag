@@ -20,10 +20,10 @@
 <?rfc inline="yes"?>
 <?rfc compact="yes"?>
 <?rfc subcompact="no"?>
-<rfc category="std" docName="draft-hegde-ospf-group-admin-tag-00" ipr="trust200902">
+<rfc category="std" docName="draft-hegde-ospf-node-admin-tag-00" ipr="trust200902">
 
 <front>
-    <title>Advertising a router's administrative group tag in OSPF</title>
+    <title>Advertising per-node administrative tags in OSPF</title>
 
     <author initials="S." surname="Hegde" fullname="Shraddha Hegde">
 	<organization>Juniper Networks, Inc.</organization>
@@ -66,7 +66,7 @@
       </address>
     </author>
 	
-    <date day="8" month="July" year="2013" />
+    <date day="3" month="July" year="2013" />
 
     <area>Routing</area>
     <workgroup>Open Shortest Path First IGP</workgroup>
@@ -79,8 +79,8 @@
 
     <abstract>
       <t> This document describes an extension to OSPF protocol <xref target="RFC2328" /> to 
-      add an optional operational capability that allows tagging anf grouping of 
-      the nodes in an OSPF domain. This allows ease of management and 
+      add an optional operational capability that allows tagging and grouping of 
+      the nodes in an OSPF domain. This allows simplification of pease of management and 
       control over route and path selection based on configured policies. </t>
 
       <t>This document describes the protocol extensions to disseminate
@@ -98,35 +98,25 @@
 <middle>
 
 <section title="Introduction" anchor='intro'>
-  <t> This document provides mechanisms to advertise administrative group 
-  tags in OSPF router information LSA <xref target="RFC4970"/>. OSPF external LSAs carry 
-  a tag information which is used to prevent routing loops by configuring 
-  policies. In certain path-selection applications like for example in traffic-engineering
-  or LFA backup selection there is a need to tag and group the nodes
+  <t> This document provides mechanisms to advertise per-node administrative  
+  tags for in the OSPF router information LSA <xref target="RFC4970"/>.
+  In certain path-selection applications like for example in traffic-engineering
+  or LFA backup selection there is a need to tag the nodes
   based on their roles in the network and have policies to prefer or 
-  prune the group of nodes for next hop selection.
+  prune a certain group of nodes.
   </t>
 </section>
 
-<section title='Solution'>
-    <t> For the purpose of advertising administrative group tag within OSPF 
-    a new TLV is proposed. This TLV may be carried in either 
-	<vspace blankLines="1" />
-	a)Router Information LSA <xref target="RFC4970"/> OR 
-	<vspace blankLines="1" />
-	b)Traffic Engineering LSA <xref target="RFC3630"/>
-	<vspace blankLines="1" />
-	Router Information LSA <xref target="RFC4970"/> advertises the capabilities of a 
-    node in link scoped, area scoped or AS scoped opaque LSA  <xref target="RFC5250"/>.
-	<vspace blankLines="1" />
-	This document proposes RI LSA as a means to carry the administrative
-    group tag information to support scenarios when the network is not TE 
-    enabled.
+<section title='Applicability'>
+    <t> For the purpose of advertising per-node administrative tags within OSPF 
+    a new TLV is proposed. Because path selection is a functional set which applies
+    both to TE and non-TE application the this new TLV is carried in 
+    the Router Information LSA <xref target="RFC4970"/>
     </t>
 </section>
 
-<section title='Admistrative-group-tag TLV'>
-    <t>  An administrative group tag is a 32-bit integer value that can be 
+<section title='Administrative Tag TLV'>
+    <t> An administrative Tag is a 32-bit integer value that can be 
     used to identify a group of nodes in the OSPF domain.
     <vspace blankLines="1" />
     The new TLV defined will be carried within an RI LSA for OSPFV2 and
@@ -142,52 +132,59 @@
 </section>
 
 <section title='TLV format'>
-	<section title='OSPF administrative group tag TLV'>
+	<section title='OSPF per-node administrative tag TLV'>
 	<t>The format of the TLVs within the body of an RI LSA is the same 
-    as the format used by the Traffic Engineering Extensions to OSPF 
-    <xref target="RFC3630"/>. 
+	as the format used by the Traffic Engineering Extensions to OSPF 
+	<xref target="RFC3630"/>. 
 	<vspace blankLines="1" />    
-    The LSA payload consists of one or more nested Type/Length/Value
-    (TLV) triplets.  The format of each TLV is:
+	The LSA payload consists of one or more nested Type/Length/Value
+	(TLV) triplets.  The format of each TLV is:
 	<vspace blankLines="2" />
 	
-	<figure anchor="OSPF-Admin-group-tag-TLV" title="OSPF Administrator group tag TLV" suppress-title="false" align="left" alt="" width="" height="">
+	<figure anchor="OSPF-Admin-tag-TLV" title="OSPF per-node Administrative Tag TLV"
+		suppress-title="false" align="left" alt="" width="" height="">
   <artwork xml:space="preserve" name="" type="" align="left" alt="" width="" height="">
 	  0               1               2               3
       0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
      +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
      |              Type             |             Length            |
      +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-     |                    Administrative group tag1                  |
+     |                     Administrative Tag #1                     |
      +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-     |                    Administrative group tag2                  |
-     +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+</artwork> 
-  </figure>
+     |                     Administrative Tag #2                     |
+     +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+     //                                                             //
+     +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+     |                     Administrative Tag #N                     |
+     +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+  </artwork> 
+	</figure>
 
-     
+    
      <vspace blankLines="1" />
 	 <vspace blankLines="1" />
-      Type :   A 16-bit field defined by IANA.
+      Type :   TBA
      <vspace blankLines="1" />
       Length:  A 16-bit field that indicates the length of the value
                portion in octets and will be a multiple of 4 octets
                dependent on the number of tags advertised.
      <vspace blankLines="1" />        
-      Value:   A  sequence of multiple 4 octets defining the 
-               administrative group tags.
+      Value:   A sequence of multiple 4 octets defining the 
+               administrative tags.
 	</t>
 	</section>
 
 	<section title='Ordering of tags'>
 	<t> The semantics of the tag order are implementation-dependent. That 
-    is, there is no implied meaning to the ordering of the tags that
-    indicates a certain operation or set of operations that need to be 
-    performed based on the ordering.  
-    <vspace blankLines="1" />
-    Each tag SHOULD be treated as an autonomous identifier that MAY be 
-    used in policy to perform a policy action.  Whether or not tag A 
-    precedes or succeeds tag B SHOULD not change the meaning of the 
-    tag set.
+	is, there is no implied meaning to the ordering of the tags that
+	indicates a certain operation or set of operations that need to be 
+	performed based on the ordering.  
+	<vspace blankLines="1" />
+
+	Each tag SHOULD be treated as an independent identifier that MAY be 
+	used in policy to perform a policy action.  Whether or not tag A 
+	precedes or succeeds tag B SHOULD not change the meaning of the 
+	tag set.
 	</t>
 	</section>
 </section>
@@ -211,6 +208,7 @@
 	</t>
 </section>
 	 
+<!-- HG: FIXME: add traffic-engineering reference -->
 
 <section title='Security Considerations' anchor='sec-con'>
 
@@ -230,7 +228,7 @@
 </section>
 
 <section title='Acknowledgments'>
-    <t>  Thanks to Bharath R and Pushpasis Sarakar for useful inputs.
+    <t>Thanks to Bharath R and Pushpasis Sarakar for useful inputs.
     </t>
 </section>
 
@@ -238,13 +236,14 @@
 
 <back>
 <references title='Normative References'>
-       &RFC2328;
-	   &RFC5340;
-	   &RFC3630;
-	   &RFC4970;
-	   &RFC2119;
-	   &RFC5250;	
+  &RFC2328;
+  &RFC5340;
+  &RFC3630;
+  &RFC4970;
+  &RFC2119;
+  &RFC5250;	
 </references>
+
 <references title='Informative References'>
    &RFC5286;
    &RFC5310;
@@ -252,5 +251,4 @@
    <?rfc include="http://xml.resource.org/public/rfc/bibxml3/reference.I-D.draft-litkowski-rtgwg-lfa-manageability-01.xml"?>
 </references>
 </back>
-
 </rfc>
