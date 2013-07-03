@@ -52,9 +52,16 @@
 	</address>
     </author>
 	
-    <date month="July" year="2013" />
+    <date day="8" month="July" year="2013" />
+
     <area>Routing</area>
-    <keyword>Internet-Draft</keyword>
+    <workgroup>Open Shortest Path First IGP</workgroup>
+
+    <keyword>MPLS</keyword>
+    <keyword>IGP</keyword>
+    <keyword>OSPF</keyword>
+    <keyword>admin-tag</keyword>
+    <keyword>traffic engineering</keyword>
 
     <abstract>
 	<t> This document describes an extension to OSPF protocol <xref target="RFC2328" /> to 
