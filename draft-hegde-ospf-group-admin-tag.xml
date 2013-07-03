@@ -51,6 +51,20 @@
 	    <email>hraghuveer@juniper.net</email>
 	</address>
     </author>
+
+    <author fullname="Hannes Gredler" initials="H." surname="Gredler">
+      <organization>Juniper Networks, Inc.</organization>
+      <address>
+	<postal>
+	  <street>1194 N. Mathilda Ave.</street>
+	  <city>Sunnyvale</city>
+	  <region>CA</region>
+	  <code>94089</code>
+	  <country>US</country>
+	</postal>
+	<email>hannes@juniper.net</email>
+      </address>
+    </author>
 	
     <date day="8" month="July" year="2013" />
 
@@ -64,40 +78,34 @@
     <keyword>traffic engineering</keyword>
 
     <abstract>
-	<t> This document describes an extension to OSPF protocol <xref target="RFC2328" /> to 
-    add an optional operational capability that allows grouping of 
-    the nodes in an OSPF domain. This allows ease of management and 
-    control over route selection based on configured policies. This 
-    document provides an extension to carry the administrative group 
-    tag information in router information LSA for policy use.
-	</t>
+      <t> This document describes an extension to OSPF protocol <xref target="RFC2328" /> to 
+      add an optional operational capability that allows tagging anf grouping of 
+      the nodes in an OSPF domain. This allows ease of management and 
+      control over route and path selection based on configured policies. </t>
+
+      <t>This document describes the protocol extensions to disseminate
+      per-node admin-tags to the OSPFv2 and OPSFv3 protocol.</t>
     </abstract>
+
+    <note title="Requirements Language">
+      <t>The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
+      "SHOULD", "SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in this
+      document are to be interpreted as described in <xref
+      target="RFC2119">RFC 2119</xref>.</t>
+    </note>
 </front>
 
 <middle>
+
 <section title="Introduction" anchor='intro'>
-    <t> This document provides mechanisms to advertise administrative group 
-    tags in OSPF router information LSA <xref target="RFC4970"/>. OSPF external LSAs carry 
-    a tag information which is used to prevent routing loops by configuring 
-    policies. In certain applications, there is a need to group the nodes
-    based on their roles in the network and have policies to prefer or 
-    prune the group of nodes for next hop selection.
-    </t>
-
-    <section title='Terminology'>
-        <t>
-        The terminology used in this document for OSPF can be found in <xref target="RFC2328"/>. 		
-        </t>
-    </section>
-
-    <section title='Conventions'>
-	<t>
-	The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL
-	NOT", "SHOULD", "SHOULD NOT", "RECOMMENDED", "MAY", and
-	"OPTIONAL" in this document are to be interpreted as described
-        in <xref target="RFC2119"/>.
-	</t>
-    </section>
+  <t> This document provides mechanisms to advertise administrative group 
+  tags in OSPF router information LSA <xref target="RFC4970"/>. OSPF external LSAs carry 
+  a tag information which is used to prevent routing loops by configuring 
+  policies. In certain path-selection applications like for example in traffic-engineering
+  or LFA backup selection there is a need to tag and group the nodes
+  based on their roles in the network and have policies to prefer or 
+  prune the group of nodes for next hop selection.
+  </t>
 </section>
 
 <section title='Solution'>
