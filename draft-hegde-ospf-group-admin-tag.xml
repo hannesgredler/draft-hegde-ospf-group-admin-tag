@@ -93,8 +93,8 @@
 
     <abstract>
       <t> This document describes an extension to OSPF protocol <xref target="RFC2328" /> to 
-      add an optional operational capability that allows tagging and grouping of 
-      the nodes in an OSPF domain. This allows simplification of pease of management and 
+      add an optional operational capability, that allows tagging and grouping of 
+      the nodes in an OSPF domain. This allows simplification,ease of management and 
       control over route and path selection based on configured policies. </t>
 
       <t>This document describes the protocol extensions to disseminate
@@ -113,7 +113,7 @@
 
 <section title="Introduction" anchor='intro'>
   <t> This document provides mechanisms to advertise per-node administrative  
-  tags for in the OSPF router information LSA <xref target="RFC4970"/>.
+  tags in the OSPF router information LSA <xref target="RFC4970"/>.
   In certain path-selection applications like for example in traffic-engineering
   or LFA backup selection there is a need to tag the nodes
   based on their roles in the network and have policies to prefer or 
@@ -124,7 +124,7 @@
 <section title='Applicability'>
     <t> For the purpose of advertising per-node administrative tags within OSPF 
     a new TLV is proposed. Because path selection is a functional set which applies
-    both to TE and non-TE application the this new TLV is carried in 
+    both to TE and non-TE applications, this new TLV is carried in 
     the Router Information LSA <xref target="RFC4970"/>
     </t>
 </section>
