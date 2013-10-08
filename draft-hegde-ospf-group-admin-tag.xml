@@ -72,7 +72,7 @@
 	<postal>
 	  <street> </street>
 	  <city> </city>
-	  <region> </region></region>
+	  <region> </region>
 	  <code> </code>
 	  <country> </country>
 	</postal>
@@ -98,7 +98,7 @@
       control over route and path selection based on configured policies. </t>
 
       <t>This document describes the protocol extensions to disseminate
-      per-node admin-tags to the OSPFv2 and OPSFv3 protocol.</t>
+      per-node admin-tags to the OSPFv2 and OSPFv3 protocol.</t>
     </abstract>
 
     <note title="Requirements Language">
