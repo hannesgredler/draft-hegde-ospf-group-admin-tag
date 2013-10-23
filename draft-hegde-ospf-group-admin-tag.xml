@@ -20,10 +20,10 @@
 <?rfc inline="yes"?>
 <?rfc compact="yes"?>
 <?rfc subcompact="no"?>
-<rfc category="std" docName="draft-hegde-ospf-node-admin-tag-00" ipr="trust200902">
+<rfc category="std" docName="draft-hegde-ospf-node-admin-tag-01" ipr="trust200902">
 
 <front>
-    <title>Advertising per-node administrative tags in OSPF</title>
+    <title abbrev="OSPF router admin tags">Advertising per-node administrative tags in OSPF</title>
 
     <author initials="S." surname="Hegde" fullname="Shraddha Hegde">
 	<organization>Juniper Networks, Inc.</organization>
@@ -66,7 +66,7 @@
       </address>
     </author>
     
-     <author fullname="Rob shakir" initials="R." surname="Shakir">
+     <author fullname="Rob Shakir" initials="R." surname="Shakir">
       <organization>British Telecom</organization>
       <address>
 	<postal>
@@ -79,8 +79,22 @@
 	<email>rob.shakir@bt.com</email>
       </address>
     </author>
-	
-    <date day="3" month="July" year="2013" />
+
+    <author fullname="Anton Smirnov" initials="A." surname="Smirnov">
+      <organization>Cisco Systems, Inc.</organization>
+      <address>
+        <postal>
+          <street>De Kleetlaan 6a</street>
+          <city>Diegem</city>
+          <region/>
+          <code>1831</code>
+          <country>Belgium</country>
+        </postal>
+        <email>as@cisco.com</email>
+      </address>
+    </author>
+
+    <date year="2013"/>
 
     <area>Routing</area>
     <workgroup>Open Shortest Path First IGP</workgroup>
