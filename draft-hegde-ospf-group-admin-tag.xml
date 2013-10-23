@@ -113,7 +113,7 @@
 
 <section title="Introduction" anchor='intro'>
   <t> This document provides mechanisms to advertise per-node administrative  
-  tags in the OSPF router information LSA <xref target="RFC4970"/>.
+  tags in the OSPF Router Information LSA <xref target="RFC4970"/>.
   In certain path-selection applications like for example in traffic-engineering
   or LFA backup selection there is a need to tag the nodes
   based on their roles in the network and have policies to prefer or 
@@ -125,7 +125,7 @@
     <t> For the purpose of advertising per-node administrative tags within OSPF 
     a new TLV is proposed. Because path selection is a functional set which applies
     both to TE and non-TE applications, this new TLV is carried in 
-    the Router Information LSA <xref target="RFC4970"/>
+    the Router Information LSA (RI LSA) <xref target="RFC4970"/>
     </t>
 </section>
 
@@ -145,8 +145,8 @@
     </t>
 </section>
 
-<section title='TLV format'>
-	<section title='OSPF per-node administrative tag TLV'>
+<section title='OSPF per-node administrative tag TLV'>
+	<section title='TLV format'>
 	<t>The format of the TLVs within the body of an RI LSA is the same 
 	as the format used by the Traffic Engineering Extensions to OSPF 
 	<xref target="RFC3630"/>. 
@@ -187,19 +187,52 @@
                administrative tags.
 	</t>
 	</section>
+	
+	<section title='Elements of procedure'>
+	<t>Meaning of the Node administrative tags is generally
+	opaque to OSPF. Router advertising the Node
+	administrative tag (or tags) may be configured to do so
+	without knowing (or even explicitly supporting)
+	functionality implied by the tag.</t>
 
-	<section title='Ordering of tags'>
-	<t> The semantics of the tag order are implementation-dependent. That 
-	is, there is no implied meaning to the ordering of the tags that
-	indicates a certain operation or set of operations that need to be 
-	performed based on the ordering.  
-	<vspace blankLines="1" />
+	<t>Interpretation of the tag values is
+	implementation-specific. The meaning of a Node
+	administrative tag is defined by the network local policy
+	and is controlled via the configuration. There are no tag
+	values defined by this specification.</t>
 
-	Each tag SHOULD be treated as an independent identifier that MAY be 
-	used in policy to perform a policy action.  Whether or not tag A 
-	precedes or succeeds tag B SHOULD not change the meaning of the 
-	tag set.
-	</t>
+	<t>The semantics of the tag order are
+	implementation-dependent. That is, there is no implied
+	meaning to the ordering of the tags that indicates a
+	certain operation or set of operations that need to be
+	performed based on the ordering.</t>
+
+	<t>Each tag SHOULD be treated as an independent
+	identifier that MAY be used in policy to perform a policy
+	action.  Whether or not tag A precedes or succeeds tag B
+	SHOULD not change the meaning of the tag set.</t>
+
+	<t>To avoid incomplete or inconsistent interpretations of
+	the Node administrative tags the same tag value MUST NOT
+	be advertised by a router in RI LSAs of different
+	scopes. The same tag MAY be advertised in multiple RI
+	LSAs of the same scope, for example, OSPF Area Border
+	Router (ABR) may advertise the same tag in area-scope RI
+	LSAs in multiple areas connected to the ABR.</t>
+
+	<t>The Node administrative tags are not meant to be
+	extended by the future OSPF standards. The new OSPF
+	extensions MUST NOT require use of Node administrative
+	tags or define well-known tag values. Instead, the future
+	OSPF extensions must define their own data signaling
+	tailored to the needs of the feature.</t>
+
+	<t>Being part of the RI LSA, the Node administrative tag
+	TLV must be reasonably small and stable. In particular,
+	but not limited to, implementations supporting the Node
+	administrative tags MUST NOT tie advertised tags to
+	changes in the network topology (both within and outside
+	the OSPF domain) or reachability of routes.</t>
 	</section>
 </section>
 
