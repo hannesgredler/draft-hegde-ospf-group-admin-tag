@@ -251,22 +251,142 @@
 </section>
 
 <section title='Applications'>
-	<t>Increased deployment of Loop Free Alternates (LFA) as defined in 
-    <xref target="RFC5286"/> has exposed some limitations.New draft Operation management 
-    of Loop Free Alternates <xref target="I-D.litkowski-rtgwg-lfa-manageability"/>
-    proposes refinements to address those limitations.
-     <vspace blankLines="1" />
-    One of the proposed refinements is to be able to group the nodes 
-    in IGP domain with administrative tags and engineer the LFA based 
-    on configured policies.
-     <vspace blankLines="1" />
-    The mechanisms outlined in this document helps provide the capability
-    to advertise group tags within OSPF protocol in order to achieve 
-    policy based LFA selection.
-     <vspace blankLines="1" />
-    The policies configured on each node can then make use of these tags 
-    to prefer or prune certain group of nodes for selecting LFAs.
+    <t>This section lists several examples of how implementations
+    might use the Node administrative tags. These examples are
+    given only to demonstrate generic usefulness of the router
+    tagging mechanism. Implementation supporting this
+    specification is not required to implement any of the use
+    cases. It is also worth noting that in some described use
+    cases routers configured to advertise tags help other routers
+    in their calculations but do not themselves implement the
+    same functionality.
+
+    <list style="numbers">
+    <t>Service auto-discovery
+	<vspace blankLines="1"/>
+
+	Router tagging may be used to automatically discover
+	group of routers sharing a particular service.
+
+	<vspace blankLines="1"/>
+
+	For example, service provider might desire to establish
+	full mesh of MPLS TE tunnels between all PE routers in
+	the area of MPLS VPN network. Marking all PE routers with
+	a tag and configuring devices with a policy to create
+	MPLS TE tunnels to all other devices advertising this tag
+	will automate maintenance of the full mesh. When new PE
+	router is added to the area, all other PE devices will
+	open TE tunnels to it without the need of reconfiguring
+	them.
+    </t>
+
+    <t>Fast-Rerouting policy
+	<vspace blankLines="1"/>
+
+	Increased deployment of Loop Free Alternates (LFA) as
+	defined in <xref target="RFC5286"/> poses operation and
+	management challenges. <xref
+	target="I-D.litkowski-rtgwg-lfa-manageability"/> proposes
+	policies which, when implemented, will ease LFA operation
+	concerns.
+
+	<vspace blankLines="1"/>
+
+	One of the proposed refinements is to be able to group
+	the nodes in IGP domain with administrative tags and
+	engineer the LFA based on configured policies.
+
+	<list style="format (%c)" hangIndent="4">
+	<t>Administrative limitation of LFA scope
+	    <vspace blankLines="1"/>
+
+	    Service provider access infrastructure is frequently
+	    designed in layered approach with each layer of
+	    devices serving different purposes and thus having
+	    different hardware capabilities and configured
+	    software features. When LFA repair paths are being
+	    computed, it may be desirable to exclude devices from
+	    being considered as LFA candidates based on their
+	    layer.
+
+	    <vspace blankLines="1"/>
+
+	    For example, if the access infrastructure is divided
+	    into the Access, Distribution and Core layers it may
+	    be desirable for a Distribution device to compute LFA
+	    only via Distribution or Core devices but not via
+	    Access devices. This may be due to features enabled
+	    on Access routers; due to capacity limitations or due
+	    to the security requirements. Managing such a policy
+	    via configuration of the router computing LFA is
+	    cumbersome and error prone.
+
+	    <vspace blankLines="1"/>
+
+	    With the Node administrative tags it is possible to
+	    assign a tag to each layer and implement LFA policy
+	    of computing LFA repair paths only via neighbors
+	    which advertise the Core or Distribution tag. This
+	    requires minimal per-node configuration and network
+	    automatically adapts when new links or routers are
+	    added.
 	</t>
+	<t>LFA calculation optimization
+	    <vspace blankLines="1"/>
+
+	    Calculation of LFA paths may require significant
+	    resources of the router. One execution of Dijkstra
+	    algorithm is required for each neighbor eligible to
+	    become next hop of repair paths. Thus a router with a
+	    few hundreds of neighbors may need to execute the
+	    algorithm hundreds of times before the best (or even
+	    valid) repair path is found. Manually excluding from
+	    the calculation neighbors which are known to provide
+	    no valid LFA (such as single-connected routers) may
+	    significantly reduce number of Dijkstra algorithm
+	    runs.
+
+	    <vspace blankLines="1"/>
+
+	    LFA calculation policy may be configured so that
+	    routers advertising certain tag value are excluded
+	    from LFA calculation even if they are otherwise
+	    suitable.
+	</t>
+	</list>
+    </t>
+
+    <t>Controlling Remote LFA tunnel termination
+	<vspace blankLines="1"/>
+
+	<xref target="I-D.ietf-rtgwg-remote-lfa"/> proposed
+	method of tunneling traffic after connected link failure
+	to extend the basic LFA coverage and algorithm to find
+	tunnel tail-end routers fitting LFA requirement. In most
+	cases proposed algorithm finds more than one candidate
+	tail-end router. In real life network it may be desirable
+	to exclude some nodes from the list of candidates based
+	on the local policy. This may be either due to known
+	limitations of the node (the router does accept targeted
+	LDP sessions required to implement Remote LFA tunneling)
+	or due to administrative requirements (for example, it
+	may be desirable to choose tail-end router among
+	co-located devices).
+
+	<vspace blankLines="1"/>
+
+	The Node administrative tag delivers simple and scalable
+	solution. Remote LFA can be configured with a policy to
+	accept during the tail-end router calculation as
+	candidates only routers advertising certain tag. Tagging
+	routers allows to both exclude nodes not capable of
+	serving as Remote LFA tunnel tail-ends and to define a
+	region from which tail-end router must be selected.
+
+    </t>
+    </list>
+    </t>
 </section>
 	 
 <!-- HG: FIXME: add traffic-engineering reference -->
@@ -310,6 +430,7 @@
    &RFC5310;
    &RFC5329; 
    <?rfc include="http://xml.resource.org/public/rfc/bibxml3/reference.I-D.draft-litkowski-rtgwg-lfa-manageability-01.xml"?>
+   <?rfc include="http://xml.resource.org/public/rfc/bibxml3/reference.I-D.draft-ietf-rtgwg-remote-lfa-02.xml"?>
 </references>
 </back>
 </rfc>
