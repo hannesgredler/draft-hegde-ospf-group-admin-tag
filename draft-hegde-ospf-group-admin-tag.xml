@@ -198,7 +198,8 @@
                dependent on the number of tags advertised.
      <vspace blankLines="1" />        
       Value:   A sequence of multiple 4 octets defining the 
-               administrative tags.
+               administrative tags. The number of tags carried in this 
+               TLV is restricted to 64.
 	</t>
 	</section>
 	
