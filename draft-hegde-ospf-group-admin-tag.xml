@@ -1,8 +1,5 @@
 <?xml version="1.0"?>
 <!DOCTYPE rfc SYSTEM "rfc2629.dtd" [
-<!ENTITY RFC5310 PUBLIC "" "http://xml.resource.org/public/rfc/bibxml/reference.RFC.5310.xml">
-<!ENTITY RFC5329 PUBLIC "" "http://xml.resource.org/public/rfc/bibxml/reference.RFC.5329.xml">
-<!ENTITY RFC5250 PUBLIC "" "http://xml.resource.org/public/rfc/bibxml/reference.RFC.5250.xml">
 <!ENTITY RFC2119 PUBLIC "" "http://xml.resource.org/public/rfc/bibxml/reference.RFC.2119.xml">
 <!ENTITY RFC2328 PUBLIC "" "http://xml.resource.org/public/rfc/bibxml/reference.RFC.2328.xml">
 <!ENTITY RFC5340 PUBLIC "" "http://xml.resource.org/public/rfc/bibxml/reference.RFC.5340.xml">
@@ -169,23 +166,22 @@
 	(TLV) triplets.  The format of each TLV is:
 	<vspace blankLines="2" />
 	
-	<figure anchor="OSPF-Admin-tag-TLV" title="OSPF per-node Administrative Tag TLV"
-		suppress-title="false" align="left" alt="" width="" height="">
-  <artwork xml:space="preserve" name="" type="" align="left" alt="" width="" height="">
-	  0               1               2               3
-      0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
-     +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-     |              Type             |             Length            |
-     +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-     |                     Administrative Tag #1                     |
-     +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-     |                     Administrative Tag #2                     |
-     +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-     //                                                             //
-     +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-     |                     Administrative Tag #N                     |
-     +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-  </artwork> 
+	<figure anchor="OSPF-Admin-tag-TLV" title="OSPF per-node Administrative Tag TLV">
+	  <artwork>
+    0               1               2               3
+ 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|              Type             |             Length            |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|                     Administrative Tag #1                     |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|                     Administrative Tag #2                     |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+//                                                             //
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|                     Administrative Tag #N                     |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+	  </artwork> 
 	</figure>
 
     
@@ -423,13 +419,10 @@
   &RFC3630;
   &RFC4970;
   &RFC2119;
-  &RFC5250;	
 </references>
 
 <references title='Informative References'>
    &RFC5286;
-   &RFC5310;
-   &RFC5329; 
    <?rfc include="http://xml.resource.org/public/rfc/bibxml3/reference.I-D.draft-litkowski-rtgwg-lfa-manageability-01.xml"?>
    <?rfc include="http://xml.resource.org/public/rfc/bibxml3/reference.I-D.draft-ietf-rtgwg-remote-lfa-02.xml"?>
 </references>
