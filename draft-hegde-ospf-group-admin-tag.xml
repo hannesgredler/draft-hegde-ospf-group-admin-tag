@@ -91,6 +91,22 @@
       </address>
     </author>
 
+    <author fullname="Li zhenbin" initials="Z." surname="Li">
+      <organization>Huawei Technologies</organization>
+      <address>
+        <postal>
+          <street>Huawei Bld.  No.156 Beiqing Rd</street>
+          <city> Beijing</city>
+          <region/>
+          <code>100095</code>
+          <country>China</country>
+        </postal>
+        <email>lizhenbin@huawei.com</email>
+      </address>
+    </author>
+
+
+
     <date day="14" month="February" year="2014"/>
 
     <area>Routing</area>
@@ -153,6 +169,10 @@
     node advertises the set of groups it is part of in the OSPF domain.
     (for example, all PE-nodes are configured with certain tag value, 
     all P-nodes are configured with a different tag value in a domain).
+    The total number of admin tags that a given router can advertise at one time
+    is restricted to 64. If more tags are needed in future, multi-instancing of the
+    RI LSA  <xref target="RFC4970"/> may be required.
+
     </t>
 </section>
 
@@ -212,11 +232,10 @@
 	and is controlled via the configuration. There are no tag
 	values defined by this specification.</t>
 
-	<t>The semantics of the tag order are
-	implementation-dependent. That is, there is no implied
-	meaning to the ordering of the tags that indicates a
-	certain operation or set of operations that need to be
-	performed based on the ordering.</t>
+	<t>The semantics of the tag order has no meaning.
+	That is, there is no implied meaning to the ordering of the 
+         tags that indicates a certain operation or set of operations
+         that need to be performed based on the ordering.</t>
 
 	<t>Each tag SHOULD be treated as an independent
 	identifier that MAY be used in policy to perform a policy
@@ -382,6 +401,69 @@
 	region from which tail-end router must be selected.
 
     </t>
+     <t>Mobile backhaul network service deployment
+	<vspace blankLines="1"/>
+
+      The topology of mobile backhaul network usually adopts ring topology
+      to save fiber resource and it is divided into the aggregate network and 
+      the access network.  Cell Site Gateways(CSGs) connects the eNodeBs and 
+      RNC(Radio Network Controller) Site Gateways(RSGs)connects the RNCs. 
+      The mobile traffic is transported  from CSGs to RSGs.  The network takes
+      a typical aggregate traffic model that more than one access rings will
+      attach to one pair of aggregate site gateways(ASGs) and more than one 
+      aggregate rings will attach to one pair of RSGs.
+	<vspace blankLines="1"/>
+
+     <figure anchor="mobile-backhaul-network" title="Mobile Backhaul Network">
+	  <artwork>
+
+
+                   ----------------
+                  /                \
+                 /                  \
+                /                    \
+   +------+   +----+    Access     +----+
+   |eNodeB|---|CSG1|    Ring 1     |ASG1|-------------
+   +------+   +----+               +----+             \
+                \                    /                 \
+                 \                  /                   +----+    +---+
+                  \             +----+                  |RSG1|----|RNC|
+                   -------------|    |    Aggregate     +----+    +---+
+                                |ASG2|      Ring          |
+                   -------------|    |                  +----+    +---+
+                  /             +----+                  |RSG2|----|RNC|
+                 /                  \                   +----+    +---+
+                /                    \                 /
+   +------+   +----+     Access     +----+            /
+   |eNodeB|---|CSG2|     Ring 2     |ASG3|------------
+   +------+   +----+                +----+
+               \                     /
+                \                   /
+                 \                 /
+                  -----------------
+
+         </artwork> 
+	</figure>
+
+      <vspace blankLines="1"/>
+
+
+        A typical mobile backhaul network with access rings and aggregate
+        links is show in figure above. The mobile backhaul networks deploy
+        traffic engineering due to the strict Service Level Agreements(SLA). 
+        The TE paths may have additional constraints to avoid  passing via different 
+        access rings or to get completely disjoint backup TE paths. The mobile backhaul 
+        networks towards the access side change frequently due to the growing mobile
+        traffic and addition of new eNodeBs. It's complex to  satisfy the requirements 
+        using cost, link color or explicit path configurations.
+
+       The node administrative tag defined in this document can be effectively used
+       to solve the problem for mobile backhaul networks. The nodes in different rings
+       can be assigned with specific tags. TE path computation can be enhanced to
+       consider additional constraints based on node administrative tags.    </t>
+
+
+
     </list>
     </t>
 </section>
@@ -406,7 +488,8 @@
 </section>
 
 <section title='Acknowledgments'>
-    <t>Thanks to Bharath R and Pushpasis Sarakar for useful inputs.
+    <t>Thanks to Bharath R and Pushpasis Sarakar for useful inputs. Thanks to Chris Bowers 
+     for providing useful inputs to remove ambiguity related to tag-ordering.
     </t>
 </section>
 
