@@ -125,7 +125,7 @@
       control over route and path selection based on configured policies. </t>
 
       <t>This document describes the protocol extensions to disseminate
-      per-node admin-tags to the OSPFv2 and OSPFv3 protocol.</t>
+      per-node administrative-tags to the OSPFv2 and OSPFv3 protocol.</t>
     </abstract>
 
     <note title="Requirements Language">
@@ -142,7 +142,7 @@
   <t> This document provides mechanisms to advertise per-node administrative  
   tags in the OSPF Router Information LSA <xref target="RFC4970"/>.
   In certain path-selection applications like for example in traffic-engineering
-  or LFA backup selection there is a need to tag the nodes
+  or Loop Free Alternate (LFA) backup selection there is a need to tag the nodes
   based on their roles in the network and have policies to prefer or 
   prune a certain group of nodes.
   </t>
@@ -169,18 +169,19 @@
     node advertises the set of groups it is part of in the OSPF domain.
     (for example, all PE-nodes are configured with certain tag value, 
     all P-nodes are configured with a different tag value in a domain).
-    The total number of admin tags that a given router can advertise at one time
-    is restricted to 64. If more tags are needed in future, multi-instancing of the
-    RI LSA  <xref target="RFC4970"/> may be required.
+    The total number of admin tags that a given router can advertise in one TLV
+    is restricted to 64. If more tags are needed, multiple TLVs can be added in same RI-LSA or
+    in different instance of the RI LSA as defined in 
+    <xref target="I-D.acee-ospf-rfc4970bis"/>.
 
     </t>
 </section>
 
 <section title='OSPF per-node administrative tag TLV'>
 	<section title='TLV format'>
-	<t>The format of the TLVs within the body of an RI LSA is the same 
-	as the format used by the Traffic Engineering Extensions to OSPF 
-	<xref target="RFC3630"/>. 
+	<t>As per  <xref target="RFC4970"/>, the format of the TLVs within the body of
+	an RI LSA is the same as the format used by the Traffic Engineering
+	Extensions to OSPF <xref target="RFC3630"/>. 
 	<vspace blankLines="1" />    
 	The LSA payload consists of one or more nested Type/Length/Value
 	(TLV) triplets.  The format of each TLV is:
@@ -215,22 +216,25 @@
      <vspace blankLines="1" />        
       Value:   A sequence of multiple 4 octets defining the 
                administrative tags. The number of tags carried in this 
-               TLV is restricted to 64.
+               TLV is restricted to 64. atleast one tag MUST be carried if
+               this TLV is included in the RI-LSA.
 	</t>
 	</section>
 	
 	<section title='Elements of procedure'>
 	<t>Meaning of the Node administrative tags is generally
-	opaque to OSPF. Router advertising the Node
+	opaque to OSPF. Router advertising the per-node
 	administrative tag (or tags) may be configured to do so
 	without knowing (or even explicitly supporting)
 	functionality implied by the tag.</t>
 
 	<t>Interpretation of the tag values is
-	implementation-specific. The meaning of a Node
+	implementation-specific. The meaning of a per-node
 	administrative tag is defined by the network local policy
 	and is controlled via the configuration. There are no tag
-	values defined by this specification.</t>
+	values defined by this specification. If a receiving node does not
+        understand the tag value, it ignores the TLV and floods the 
+        RI LSA without any change as defined in <xref target="RFC4970"/>.</t>
 
 	<t>The semantics of the tag order has no meaning.
 	That is, there is no implied meaning to the ordering of the 
@@ -243,23 +247,23 @@
 	SHOULD not change the meaning of the tag set.</t>
 
 	<t>To avoid incomplete or inconsistent interpretations of
-	the Node administrative tags the same tag value MUST NOT
+	the per-node administrative tags the same tag value MUST NOT
 	be advertised by a router in RI LSAs of different
 	scopes. The same tag MAY be advertised in multiple RI
 	LSAs of the same scope, for example, OSPF Area Border
 	Router (ABR) may advertise the same tag in area-scope RI
 	LSAs in multiple areas connected to the ABR.</t>
 
-	<t>The Node administrative tags are not meant to be
+	<t>The per-node administrative tags are not meant to be
 	extended by the future OSPF standards. The new OSPF
-	extensions MUST NOT require use of Node administrative
+	extensions MUST NOT require use of per-node administrative
 	tags or define well-known tag values. Instead, the future
 	OSPF extensions must define their own data signaling
 	tailored to the needs of the feature.</t>
 
-	<t>Being part of the RI LSA, the Node administrative tag
+	<t>Being part of the RI LSA, the per-node administrative tag
 	TLV must be reasonably small and stable. In particular,
-	but not limited to, implementations supporting the Node
+	but not limited to, implementations supporting the per-node
 	administrative tags MUST NOT tie advertised tags to
 	changes in the network topology (both within and outside
 	the OSPF domain) or reachability of routes.</t>
@@ -303,7 +307,7 @@
 	Increased deployment of Loop Free Alternates (LFA) as
 	defined in <xref target="RFC5286"/> poses operation and
 	management challenges. <xref
-	target="I-D.litkowski-rtgwg-lfa-manageability"/> proposes
+	target="I-D.ietf-rtgwg-lfa-manageability"/> proposes
 	policies which, when implemented, will ease LFA operation
 	concerns.
 
@@ -488,7 +492,7 @@
 </section>
 
 <section title='Acknowledgments'>
-    <t>Thanks to Bharath R and Pushpasis Sarakar for useful inputs. Thanks to Chris Bowers 
+    <t>Thanks to Bharath R, Pushpasis Sarakar and Dhruv Dhody for useful inputs. Thanks to Chris Bowers 
      for providing useful inputs to remove ambiguity related to tag-ordering.
     </t>
 </section>
@@ -506,7 +510,8 @@
 
 <references title='Informative References'>
    &RFC5286;
-   <?rfc include="http://xml.resource.org/public/rfc/bibxml3/reference.I-D.draft-litkowski-rtgwg-lfa-manageability-01.xml"?>
+   <?rfc include="http://xml.resource.org/public/rfc/bibxml3/reference.I-D.draft-ietf-rtgwg-lfa-manageability-04.xml"?>
+   <?rfc include="http://xml.resource.org/public/rfc/bibxml3/reference.I-D.draft-acee-ospf-rfc4970bis-00.xml"?>
    <?rfc include="http://xml.resource.org/public/rfc/bibxml3/reference.I-D.draft-ietf-rtgwg-remote-lfa-02.xml"?>
 </references>
 </back>
