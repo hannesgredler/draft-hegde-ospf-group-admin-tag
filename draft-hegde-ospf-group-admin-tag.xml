@@ -105,9 +105,21 @@
       </address>
     </author>
 
+    <author fullname="Bruno Decraene" initials="B." surname="Decraene">
+      <organization>Orange</organization>
+      <address>
+        <postal>
+          <street></street>
+          <city> </city>
+          <region/>
+          <code></code>
+          <country></country>
+        </postal>
+        <email>bruno.decraene@orange.com</email>
+      </address>
+    </author>
 
-
-    <date day="14" month="February" year="2014"/>
+    <date day="07" month="October" year="2014"/>
 
     <area>Routing</area>
     <workgroup>Open Shortest Path First IGP</workgroup>
@@ -257,9 +269,12 @@
 	<t>The per-node administrative tags are not meant to be
 	extended by the future OSPF standards. The new OSPF
 	extensions MUST NOT require use of per-node administrative
-	tags or define well-known tag values. Instead, the future
-	OSPF extensions must define their own data signaling
-	tailored to the needs of the feature.</t>
+	tags or define well-known tag values. 
+	Instead, the future OSPF extensions must define their own data signaling
+	tailored to the needs of the feature.Node administrative tags 
+	are for generic use and do not require IANA registry. Any new feature
+	requiring well known tag values MAY use capability TLV as defined in
+	<xref target="RFC4970"/>. </t>
 
 	<t>Being part of the RI LSA, the per-node administrative tag
 	TLV must be reasonably small and stable. In particular,
@@ -469,6 +484,67 @@
 
 
     </list>
+    </t>
+     <t>Explicit routing policy
+	<vspace blankLines="1"/>
+
+	Partially meshed network provides multiple paths between any two nodes in the network.
+	In a data center environment, the topology is usually highly symmetric with many/all 
+	paths having equal cost. In a long distance network, this is usually less the case for 
+	a variety of reasons (e.g. historic, fiber availability constraints, different distances
+	between transit nodes, different roles ...). Hence between a given source and destination, 
+	a path is typically preferred over the others, while between the same source and another 
+	destination, another path may be preferred.
+
+
+	<vspace blankLines="1"/>
+
+     <figure anchor="Explicit routing topology" title="Topology">
+	  <artwork>
+
+            +--------------------+
+            |                    |
+            |    +----------+    |
+            |    |          |    |
+            T-10-T          |    |
+           /|   /|          |    |
+          / |  / |          |    |
+       --+  | |  |          |    |
+      /  +--+-+ 100         |    |
+     /  /   |    |          |    |
+    /  /    R-18-R          |    |
+   /  /    /\   /\          |    |
+  /  |    /  \ /  \         |    |
+ /   |   /    x    \        |    |
+A-25-A  10  10 \    \       |    |
+       /    /   10   10     |    |
+      /    /     \    \     |    |
+     A-25-A       A-25-A    |    |
+      \    \     /    /     |    |
+      201  201  201 201     |    |
+        \    \ /    /       |    |
+         \    x    /        |    |
+          \  / \  /         |    |
+           \/   \/          |    |
+           I-24-I          100  100
+           |    |           |    |
+           |    +-----------+    |
+           |                     |
+           +---------------------+
+         </artwork> 
+	</figure>
+
+      <vspace blankLines="1"/>
+
+
+
+We want to enforce the following high level explicitly routed policies:
+- traffic from A nodes to A nodes must not go through I nodes    
+- traffic from A nodes to I nodes must not go through R and T nodes
+
+With node admin tag, we can set A (resp. I, R, T) tags on A (resp. I, R, T) nodes, and then configure
+this single CSPF policy on all A nodes.
+
     </t>
 </section>
 	 
