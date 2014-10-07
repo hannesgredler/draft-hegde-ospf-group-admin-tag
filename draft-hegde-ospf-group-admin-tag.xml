@@ -250,8 +250,8 @@
 
 	<t>The semantics of the tag order has no meaning.
 	That is, there is no implied meaning to the ordering of the 
-         tags that indicates a certain operation or set of operations
-         that need to be performed based on the ordering.</t>
+        tags that indicates a certain operation or set of operations
+        that need to be performed based on the ordering.</t>
 
 	<t>Each tag SHOULD be treated as an independent
 	identifier that MAY be used in policy to perform a policy
@@ -269,11 +269,11 @@
 	<t>The per-node administrative tags are not meant to be
 	extended by the future OSPF standards. The new OSPF
 	extensions MUST NOT require use of per-node administrative
-	tags or define well-known tag values. 
-	Instead, the future OSPF extensions must define their own data signaling
-	tailored to the needs of the feature.Node administrative tags 
-	are for generic use and do not require IANA registry. Any new feature
-	requiring well known tag values MAY use capability TLV as defined in
+	tags or define well-known tag values. Node administrative tags 
+	are for generic use and do not require IANA registry.
+	The future OSPF extensions requiring well known values MAY 
+	define their own data signaling tailored to the needs of the 
+	feature or MAY use capability TLV as defined in
 	<xref target="RFC4970"/>. </t>
 
 	<t>Being part of the RI LSA, the per-node administrative tag
@@ -494,7 +494,7 @@
 	a variety of reasons (e.g. historic, fiber availability constraints, different distances
 	between transit nodes, different roles ...). Hence between a given source and destination, 
 	a path is typically preferred over the others, while between the same source and another 
-	destination, another path may be preferred.
+	destination, a different path may be preferred.
 
 
 	<vspace blankLines="1"/>
@@ -538,12 +538,12 @@ A-25-A  10  10 \    \       |    |
 
 
 
-We want to enforce the following high level explicitly routed policies:
-- traffic from A nodes to A nodes must not go through I nodes    
-- traffic from A nodes to I nodes must not go through R and T nodes
+ In the above topology, operator may want to enforce the following high level explicitly routed policies:
+- Traffic from A nodes to A nodes must not go through I nodes    
+- Traffic from A nodes to I nodes must not go through R and T nodes
 
-With node admin tag, we can set A (resp. I, R, T) tags on A (resp. I, R, T) nodes, and then configure
-this single CSPF policy on all A nodes.
+With node admin tag, tag A can be configured on all A nodes,  (similarly I, R, T), and then configure
+this single CSPF policy on all A nodes to avoid I nodes for path calculation.
 
     </t>
 </section>
